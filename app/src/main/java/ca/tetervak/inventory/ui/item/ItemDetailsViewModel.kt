@@ -22,10 +22,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import ca.tetervak.inventory.data.ItemsRepository
 import ca.tetervak.inventory.ui.ItemDetailsRoute
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -36,6 +38,10 @@ class ItemDetailsViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository,
 ) : ViewModel() {
+
+    // A channel for one-time navigation events
+    private val _navigationEvent = Channel<Unit>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     private val route: ItemDetailsRoute = savedStateHandle.toRoute<ItemDetailsRoute>()
     private val itemId: Int = route.itemId
@@ -70,8 +76,11 @@ class ItemDetailsViewModel(
     /**
      * Deletes the item from the [ItemsRepository]'s data source.
      */
-    suspend fun deleteItem() {
-        itemsRepository.deleteItem(uiState.value.itemDetails.toItem())
+    fun deleteItem() {
+        viewModelScope.launch {
+            itemsRepository.deleteItem(uiState.value.itemDetails.toItem())
+            _navigationEvent.send(Unit) // Send one-time event
+        }
     }
 
     companion object {

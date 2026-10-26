@@ -45,6 +45,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,8 +73,12 @@ fun ItemDetailsScreen(
     modifier: Modifier = Modifier,
 
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect {
+            navigateBack() // Will only ever trigger once per event, never re-triggered by rotation
+        }
+    }
     val uiState = viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -103,16 +108,7 @@ fun ItemDetailsScreen(
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
             onSellItem = { viewModel.reduceQuantityByOne() },
-            onDelete = {
-                // Note: If the user rotates the screen very fast, the operation may get cancelled
-                // and the item may not be deleted from the Database. This is because when config
-                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                // be cancelled - since the scope is bound to composition.
-                coroutineScope.launch {
-                    viewModel.deleteItem()
-                    navigateBack()
-                }
-            },
+            onDelete = viewModel::deleteItem,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),

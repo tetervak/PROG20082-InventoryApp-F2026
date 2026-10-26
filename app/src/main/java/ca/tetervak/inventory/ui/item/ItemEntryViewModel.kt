@@ -20,14 +20,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import ca.tetervak.inventory.data.Item
 import ca.tetervak.inventory.data.ItemsRepository
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 
 /**
  * ViewModel to validate and insert items in the Room database.
  */
 class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
+
+    // A channel for one-time navigation events
+    private val _navigationEvent = Channel<Unit>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
 
     /**
      * Holds current item ui state
@@ -47,9 +55,12 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
     /**
      * Inserts an [Item] in the Room database
      */
-    suspend fun saveItem() {
+    fun saveItem() {
         if (validateInput()) {
-            itemsRepository.insertItem(itemUiState.itemDetails.toItem())
+            viewModelScope.launch {
+                itemsRepository.insertItem(itemUiState.itemDetails.toItem())
+                _navigationEvent.send(Unit) // Send one-time event
+            }
         }
     }
 

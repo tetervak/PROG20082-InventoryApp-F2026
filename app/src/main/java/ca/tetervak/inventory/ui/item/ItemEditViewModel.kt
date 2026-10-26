@@ -25,8 +25,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import ca.tetervak.inventory.data.ItemsRepository
 import ca.tetervak.inventory.ui.ItemEditRoute
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -36,6 +38,11 @@ class ItemEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {
+
+    // A channel for one-time navigation events
+    private val _navigationEvent = Channel<Unit>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
+
 
     /**
      * Holds current item ui state
@@ -58,9 +65,12 @@ class ItemEditViewModel(
     /**
      * Update the item in the [ItemsRepository]'s data source
      */
-    suspend fun updateItem() {
+    fun updateItem() {
         if (validateInput(itemUiState.itemDetails)) {
-            itemsRepository.updateItem(itemUiState.itemDetails.toItem())
+            viewModelScope.launch {
+                itemsRepository.updateItem(itemUiState.itemDetails.toItem())
+                _navigationEvent.send(Unit) // Send one-time event
+            }
         }
     }
 

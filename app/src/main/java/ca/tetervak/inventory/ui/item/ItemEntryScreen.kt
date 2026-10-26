@@ -33,7 +33,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
-import kotlinx.coroutines.launch
 import java.util.Currency
 import androidx.compose.ui.platform.LocalLocale
 
@@ -55,7 +54,11 @@ fun ItemEntryScreen(
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect {
+            navigateBack() // Will only ever trigger once per event, never re-triggered by rotation
+        }
+    }
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -68,16 +71,7 @@ fun ItemEntryScreen(
         ItemEntryBody(
             itemUiState = viewModel.itemUiState,
             onItemValueChange = viewModel::updateUiState,
-            onSaveClick = {
-                // Note: If the user rotates the screen very fast, the operation may get cancelled
-                // and the item may not be saved in the Database. This is because when config
-                // change occurs, the Activity will be recreated and the rememberCoroutineScope will
-                // be cancelled - since the scope is bound to composition.
-                coroutineScope.launch {
-                    viewModel.saveItem()
-                    navigateBack()
-                }
-            },
+            onSaveClick = viewModel::saveItem,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
