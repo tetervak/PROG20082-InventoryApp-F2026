@@ -62,16 +62,8 @@ import ca.tetervak.inventory.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.data.Item
 import ca.tetervak.inventory.ui.AppViewModelProvider
-import ca.tetervak.inventory.ui.navigation.NavigationDestination
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
-
-object ItemDetailsDestination : NavigationDestination {
-    override val route = "item_details"
-    override val titleRes = R.string.item_detail_title
-    const val itemIdArg = "itemId"
-    val routeWithArgs = "$route/{$itemIdArg}"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,7 +78,7 @@ fun ItemDetailsScreen(
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ItemDetailsDestination.titleRes),
+                title = stringResource(R.string.item_detail_title),
                 canNavigateBack = true,
                 navigateUp = navigateBack
             )

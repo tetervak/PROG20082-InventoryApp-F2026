@@ -60,13 +60,7 @@ import ca.tetervak.inventory.R
 import ca.tetervak.inventory.data.Item
 import ca.tetervak.inventory.ui.AppViewModelProvider
 import ca.tetervak.inventory.ui.item.formatedPrice
-import ca.tetervak.inventory.ui.navigation.NavigationDestination
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
-
-object HomeDestination : NavigationDestination {
-    override val route = "home"
-    override val titleRes = R.string.app_name
-}
 
 /**
  * Entry route for Home screen
@@ -86,7 +80,7 @@ fun HomeScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(HomeDestination.titleRes),
+                title = stringResource(R.string.app_name),
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior
             )

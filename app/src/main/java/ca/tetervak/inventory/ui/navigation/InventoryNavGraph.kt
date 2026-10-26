@@ -23,13 +23,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import ca.tetervak.inventory.ui.home.HomeDestination
+import ca.tetervak.inventory.R
 import ca.tetervak.inventory.ui.home.HomeScreen
-import ca.tetervak.inventory.ui.item.ItemDetailsDestination
 import ca.tetervak.inventory.ui.item.ItemDetailsScreen
-import ca.tetervak.inventory.ui.item.ItemEditDestination
 import ca.tetervak.inventory.ui.item.ItemEditScreen
-import ca.tetervak.inventory.ui.item.ItemEntryDestination
 import ca.tetervak.inventory.ui.item.ItemEntryScreen
 
 /**
@@ -42,37 +39,37 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = HomeDestination.route,
+        startDestination = "home",
         modifier = modifier
     ) {
-        composable(route = HomeDestination.route) {
+        composable(route = "home") {
             HomeScreen(
-                navigateToItemEntry = { navController.navigate(ItemEntryDestination.route) },
+                navigateToItemEntry = { navController.navigate("item_entry") },
                 navigateToItemUpdate = {
-                    navController.navigate("${ItemDetailsDestination.route}/${it}")
+                    navController.navigate("item_details/${it}")
                 }
             )
         }
-        composable(route = ItemEntryDestination.route) {
+        composable(route = "item_entry") {
             ItemEntryScreen(
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )
         }
         composable(
-            route = ItemDetailsDestination.routeWithArgs,
-            arguments = listOf(navArgument(ItemDetailsDestination.itemIdArg) {
+            route = "item_details/{itemId}",
+            arguments = listOf(navArgument("itemId") {
                 type = NavType.IntType
             })
         ) {
             ItemDetailsScreen(
-                navigateToEditItem = { navController.navigate("${ItemEditDestination.route}/$it") },
+                navigateToEditItem = { navController.navigate("item_edit/$it") },
                 navigateBack = { navController.navigateUp() }
             )
         }
         composable(
-            route = ItemEditDestination.routeWithArgs,
-            arguments = listOf(navArgument(ItemEditDestination.itemIdArg) {
+            route = "item_edit/{itemId}",
+            arguments = listOf(navArgument("itemId") {
                 type = NavType.IntType
             })
         ) {

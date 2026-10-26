@@ -44,16 +44,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ca.tetervak.inventory.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.ui.AppViewModelProvider
-import ca.tetervak.inventory.ui.navigation.NavigationDestination
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
 import java.util.Currency
 import androidx.compose.ui.platform.LocalLocale
-
-object ItemEntryDestination : NavigationDestination {
-    override val route = "item_entry"
-    override val titleRes = R.string.item_entry_title
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +61,7 @@ fun ItemEntryScreen(
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ItemEntryDestination.titleRes),
+                title = stringResource(R.string.item_entry_title),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )

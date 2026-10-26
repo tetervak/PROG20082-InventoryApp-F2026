@@ -33,16 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ca.tetervak.inventory.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.ui.AppViewModelProvider
-import ca.tetervak.inventory.ui.navigation.NavigationDestination
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
-
-object ItemEditDestination : NavigationDestination {
-    override val route = "item_edit"
-    override val titleRes = R.string.edit_item_title
-    const val itemIdArg = "itemId"
-    val routeWithArgs = "$route/{$itemIdArg}"
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,7 +48,7 @@ fun ItemEditScreen(
     Scaffold(
         topBar = {
             InventoryTopAppBar(
-                title = stringResource(ItemEditDestination.titleRes),
+                title = stringResource( R.string.edit_item_title),
                 canNavigateBack = true,
                 navigateUp = onNavigateUp
             )

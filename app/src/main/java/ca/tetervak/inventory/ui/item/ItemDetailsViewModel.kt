@@ -35,7 +35,7 @@ class ItemDetailsViewModel(
     private val itemsRepository: ItemsRepository,
 ) : ViewModel() {
 
-    private val itemId: Int = checkNotNull(savedStateHandle[ItemDetailsDestination.itemIdArg])
+    private val itemId: Int = checkNotNull(savedStateHandle["itemId"])
 
     /**
      * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to
