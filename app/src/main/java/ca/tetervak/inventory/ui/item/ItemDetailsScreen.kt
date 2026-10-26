@@ -57,21 +57,20 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ca.tetervak.inventory.InventoryTopAppBar
+import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.data.Item
-import ca.tetervak.inventory.ui.AppViewModelProvider
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemDetailsScreen(
+    viewModel: ItemDetailsViewModel,
     navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ItemDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
 ) {
     val uiState = viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()

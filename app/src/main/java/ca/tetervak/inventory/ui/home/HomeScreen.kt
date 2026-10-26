@@ -54,11 +54,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ca.tetervak.inventory.InventoryTopAppBar
+import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.data.Item
-import ca.tetervak.inventory.ui.AppViewModelProvider
 import ca.tetervak.inventory.ui.item.formatedPrice
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 
@@ -68,10 +66,10 @@ import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     navigateToItemEntry: () -> Unit,
     navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

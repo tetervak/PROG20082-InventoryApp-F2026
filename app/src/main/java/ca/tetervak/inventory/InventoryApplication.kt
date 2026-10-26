@@ -17,18 +17,19 @@
 package ca.tetervak.inventory
 
 import android.app.Application
-import ca.tetervak.inventory.data.AppContainer
-import ca.tetervak.inventory.data.AppDataContainer
+import ca.tetervak.inventory.di.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class InventoryApplication : Application() {
 
-    /**
-     * AppContainer instance used by the rest of classes to obtain dependencies
-     */
-    lateinit var container: AppContainer
-
     override fun onCreate() {
         super.onCreate()
-        container = AppDataContainer(this)
+        startKoin {
+            androidLogger()
+            androidContext(this@InventoryApplication)
+            modules(appModule)
+        }
     }
 }

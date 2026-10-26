@@ -19,7 +19,9 @@ package ca.tetervak.inventory.ui.item
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import ca.tetervak.inventory.data.ItemsRepository
+import ca.tetervak.inventory.ui.ItemDetailsRoute
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -35,7 +37,8 @@ class ItemDetailsViewModel(
     private val itemsRepository: ItemsRepository,
 ) : ViewModel() {
 
-    private val itemId: Int = checkNotNull(savedStateHandle["itemId"])
+    private val route: ItemDetailsRoute = savedStateHandle.toRoute<ItemDetailsRoute>()
+    private val itemId: Int = route.itemId
 
     /**
      * Holds the item details ui state. The data is retrieved from [ItemsRepository] and mapped to

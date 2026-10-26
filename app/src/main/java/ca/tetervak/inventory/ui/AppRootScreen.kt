@@ -14,24 +14,49 @@
  * limitations under the License.
  */
 
-package ca.tetervak.inventory.ui.navigation
+package ca.tetervak.inventory.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import ca.tetervak.inventory.R
+import androidx.navigation.compose.rememberNavController
 import ca.tetervak.inventory.ui.home.HomeScreen
+import ca.tetervak.inventory.ui.home.HomeViewModel
 import ca.tetervak.inventory.ui.item.ItemDetailsScreen
+import ca.tetervak.inventory.ui.item.ItemDetailsViewModel
 import ca.tetervak.inventory.ui.item.ItemEditScreen
+import ca.tetervak.inventory.ui.item.ItemEditViewModel
 import ca.tetervak.inventory.ui.item.ItemEntryScreen
+import ca.tetervak.inventory.ui.item.ItemEntryViewModel
+import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
+
+/**
+ * Top level composable that represents screens for the application.
+ */
+@Composable
+fun AppRootScreen(navController: NavHostController = rememberNavController()) {
+    InventoryNavHost(navController = navController)
+}
 
 /**
  * Provides Navigation graph for the application.
  */
+
+@Serializable
+object HomeRoute
+
+@Serializable
+object ItemEntryRoute
+
+@Serializable
+data class ItemDetailsRoute(val itemId: Int)
+
+@Serializable
+data class ItemEditRoute(val itemId: Int)
+
 @Composable
 fun InventoryNavHost(
     navController: NavHostController,
@@ -39,41 +64,39 @@ fun InventoryNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "home",
+        startDestination = HomeRoute,
         modifier = modifier
     ) {
-        composable(route = "home") {
+        composable<HomeRoute> {
+            val viewModel: HomeViewModel = koinViewModel()
             HomeScreen(
-                navigateToItemEntry = { navController.navigate("item_entry") },
+                viewModel = viewModel,
+                navigateToItemEntry = { navController.navigate(ItemEntryRoute) },
                 navigateToItemUpdate = {
-                    navController.navigate("item_details/${it}")
+                    navController.navigate(ItemDetailsRoute(it))
                 }
             )
         }
-        composable(route = "item_entry") {
+        composable<ItemEntryRoute> {
+            val viewModel: ItemEntryViewModel = koinViewModel()
             ItemEntryScreen(
+                viewModel = viewModel,
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )
         }
-        composable(
-            route = "item_details/{itemId}",
-            arguments = listOf(navArgument("itemId") {
-                type = NavType.IntType
-            })
-        ) {
+        composable<ItemDetailsRoute> {
+            val viewModel: ItemDetailsViewModel = koinViewModel()
             ItemDetailsScreen(
-                navigateToEditItem = { navController.navigate("item_edit/$it") },
+                viewModel = viewModel,
+                navigateToEditItem = { navController.navigate(ItemEditRoute(it)) },
                 navigateBack = { navController.navigateUp() }
             )
         }
-        composable(
-            route = "item_edit/{itemId}",
-            arguments = listOf(navArgument("itemId") {
-                type = NavType.IntType
-            })
-        ) {
+        composable<ItemEditRoute> {
+            val viewModel: ItemEditViewModel = koinViewModel()
             ItemEditScreen(
+                viewModel = viewModel,
                 navigateBack = { navController.popBackStack() },
                 onNavigateUp = { navController.navigateUp() }
             )

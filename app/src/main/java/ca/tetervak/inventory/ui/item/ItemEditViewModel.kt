@@ -22,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import ca.tetervak.inventory.data.ItemsRepository
+import ca.tetervak.inventory.ui.ItemEditRoute
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -41,7 +43,8 @@ class ItemEditViewModel(
     var itemUiState by mutableStateOf(ItemUiState())
         private set
 
-    private val itemId: Int = checkNotNull(savedStateHandle["itemId"])
+    private val route: ItemEditRoute = savedStateHandle.toRoute<ItemEditRoute>()
+    private val itemId: Int = route.itemId
 
     init {
         viewModelScope.launch {

@@ -40,10 +40,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ca.tetervak.inventory.InventoryTopAppBar
+import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
-import ca.tetervak.inventory.ui.AppViewModelProvider
 import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
 import java.util.Currency
@@ -52,10 +50,10 @@ import androidx.compose.ui.platform.LocalLocale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemEntryScreen(
+    viewModel: ItemEntryViewModel,
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: ItemEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(

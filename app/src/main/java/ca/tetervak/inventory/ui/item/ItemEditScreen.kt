@@ -28,21 +28,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import ca.tetervak.inventory.InventoryTopAppBar
+import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
-import ca.tetervak.inventory.ui.AppViewModelProvider
-import ca.tetervak.inventory.ui.theme.InventoryAppTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemEditScreen(
+    viewModel: ItemEditViewModel,
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ItemEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
@@ -79,10 +75,10 @@ fun ItemEditScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ItemEditScreenPreview() {
-    InventoryAppTheme {
-        ItemEditScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ItemEditScreenPreview() {
+//    InventoryAppTheme {
+//        ItemEditScreen(navigateBack = { /*Do nothing*/ }, onNavigateUp = { /*Do nothing*/ })
+//    }
+//}
