@@ -21,7 +21,7 @@ import ca.tetervak.inventory.R
 fun InventoryTopAppBar(
     title: String,
     canNavigateBack: Boolean,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigateUp: () -> Unit = {}
 ) {
