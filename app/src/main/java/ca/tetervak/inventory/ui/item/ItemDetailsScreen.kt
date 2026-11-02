@@ -46,7 +46,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -57,6 +56,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ca.tetervak.inventory.ui.common.InventoryTopAppBar
 import ca.tetervak.inventory.R
 import ca.tetervak.inventory.data.Item
@@ -76,7 +76,7 @@ fun ItemDetailsScreen(
             navigateBack() // Will only ever trigger once per event, never re-triggered by rotation
         }
     }
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             InventoryTopAppBar(
@@ -105,7 +105,7 @@ fun ItemDetailsScreen(
     ) { innerPadding ->
         ItemDetailsBody(
             itemDetailsUiState = uiState.value,
-            onSellItem = { viewModel.reduceQuantityByOne() },
+            onSellItem = viewModel::reduceQuantityByOne,
             onDelete = viewModel::deleteItem,
             modifier = Modifier
                 .padding(
