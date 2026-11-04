@@ -47,7 +47,7 @@ class ItemEditViewModel(
     /**
      * Holds current item ui state
      */
-    var itemUiState by mutableStateOf(ItemUiState())
+    var itemUiState: ItemUiState by mutableStateOf(ItemUiState())
         private set
 
     private val route: ItemEditRoute = savedStateHandle.toRoute<ItemEditRoute>()

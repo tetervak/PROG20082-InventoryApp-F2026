@@ -40,7 +40,7 @@ class ItemEntryViewModel(private val itemsRepository: ItemsRepository) : ViewMod
     /**
      * Holds current item ui state
      */
-    var itemUiState by mutableStateOf(ItemUiState())
+    var itemUiState: ItemUiState by mutableStateOf(ItemUiState())
         private set
 
     /**
